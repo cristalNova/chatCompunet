@@ -1,0 +1,452 @@
+[
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759889706623
+  },
+  {
+    "type": "TEXT",
+    "target": "maria",
+    "content": "maria: holi",
+    "timestamp": 1759889737178
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has left",
+    "timestamp": 1759889776875
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759897442639
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has left",
+    "timestamp": 1759897513635
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759897620445
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759897756091
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has left",
+    "timestamp": 1759897859884
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759898546526
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759898821480
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759899124365
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759899483735
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759899593109
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has left",
+    "timestamp": 1759899684610
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759899899756
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759900149550
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759900280857
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759900673240
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759959501578
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has left",
+    "timestamp": 1759959777890
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759960004620
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759960084642
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759960108921
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759981560530
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759981590093
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759982050606
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759982072302
+  },
+  {
+    "type": "TEXT",
+    "target": "maria",
+    "content": "juan: holis",
+    "timestamp": 1759982084488
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759982534536
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759982562099
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759982843696
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "kilo has joined",
+    "timestamp": 1759982869390
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759983439785
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759983464577
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "uuu has joined",
+    "timestamp": 1759984131999
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "ilo has joined",
+    "timestamp": 1759984156611
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "ilo has left",
+    "timestamp": 1759984257320
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759985723573
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759985738866
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759985876485
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759985889002
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759985976416
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759985988288
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759986073380
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759986088623
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759986341409
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759986363404
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759986550095
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759986565458
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759986769929
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759986783708
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759986858563
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759986872729
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759987059207
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759987069742
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759987602045
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759987617246
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759987691808
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759987866117
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759987879983
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759988002858
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759988020522
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has left",
+    "timestamp": 1759988060659
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759988258194
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759988274117
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759988338678
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759988355243
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759989920017
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759989942460
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759990982629
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759990998294
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759991237202
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759991251270
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1759991345710
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "juan has joined",
+    "timestamp": 1759991357168
+  }
+]
