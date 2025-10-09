@@ -227,6 +227,10 @@ public class Server {
 
 
                     targetHandler.writer.write("Incoming call from " + username + ":" + ip + ":" + sendPort + ":" + receivePort);
+                    targetHandler.writer.newLine();
+                    targetHandler.writer.flush();
+
+                    writer.write(ip+ ":"+sendPort+ ":"+receivePort);
                     writer.newLine();
                     writer.flush();
                     break;
