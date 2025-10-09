@@ -1,0 +1,26 @@
+[
+  {
+    "type": "TEXT",
+    "target": "user:maria",
+    "content": "Qbo",
+    "timestamp": 1760016145049
+  },
+  {
+    "type": "TEXT",
+    "target": "group:Tcp",
+    "content": "Hola",
+    "timestamp": 1760016400743
+  },
+  {
+    "type": "TEXT",
+    "target": "group:Tcp",
+    "content": "HOla",
+    "timestamp": 1760016451777
+  },
+  {
+    "type": "TEXT",
+    "target": "group:Tcp",
+    "content": "Hola",
+    "timestamp": 1760016473622
+  }
+]

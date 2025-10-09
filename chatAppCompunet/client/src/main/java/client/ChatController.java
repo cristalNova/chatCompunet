@@ -234,10 +234,12 @@ public class ChatController {
                 System.out.println("holi1");
                 String line = in.readLine();
                 System.out.println(line);
+                System.out.println("📩 Respuesta del servidor: '" + line + "'");
                 if (line == null || line.isEmpty()) {
                     System.err.println("❌ No se recibió nada");
                     return;
                 }
+
 
                 String[] parts = line.split(":");
                 if (parts.length != 3) {
@@ -266,6 +268,7 @@ public class ChatController {
                     Platform.runLater(() -> endCall.setDisable(false));
 
                     startCall.setDisable(true);
+                    System.out.println("Llega hasta aca");
 
                 } else {
                     /*
