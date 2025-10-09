@@ -6,7 +6,7 @@ import java.net.*;
 public class VoiceReceiver implements Runnable {
     private int listenPort;
     private boolean running = true;
-    private float gain = 2.0f; // Factor de aumento de volumen
+    private float gain = 2.0f;
 
     public VoiceReceiver(int listenPort) {
         this.listenPort = listenPort;
@@ -21,7 +21,7 @@ public class VoiceReceiver implements Runnable {
         try (DatagramSocket socket = new DatagramSocket(listenPort)) {
             byte[] buffer = new byte[1024];
 
-            // ✅ Formato que funciona con tus altavoces
+
             AudioFormat format = new AudioFormat(44100.0f, 16, 1, true, false);
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
@@ -29,13 +29,13 @@ public class VoiceReceiver implements Runnable {
             speakers.open(format);
             speakers.start();
 
-            System.out.println("🔊 Altavoces listos con formato: " + format);
+            System.out.println(" Altavoces listos con formato: " + format);
 
             while (running) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
 
-                // 🔊 Amplificar audio antes de reproducirlo
+
                 byte[] audioData = packet.getData();
                 int length = packet.getLength();
                 for (int i = 0; i < length; i += 2) {
@@ -50,7 +50,7 @@ public class VoiceReceiver implements Runnable {
 
             speakers.drain();
             speakers.close();
-            System.out.println("🛑 Recepción de audio detenida.");
+            System.out.println("Recepción de audio detenida.");
 
         } catch (Exception e) {
             e.printStackTrace();
