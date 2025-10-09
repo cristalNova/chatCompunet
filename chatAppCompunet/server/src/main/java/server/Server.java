@@ -248,7 +248,7 @@ public class Server {
                     targetHandler.writer.newLine();
                     targetHandler.writer.flush();
 
-                    writer.write(ip+ ":"+sendPort+ ":"+receivePort);
+                    writer.write("/callok:"+ip+ ":"+sendPort+ ":"+receivePort);
                     writer.newLine();
                     writer.flush();
                     break;
