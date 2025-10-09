@@ -40,8 +40,10 @@ public class VoiceSender implements Runnable {
 
             while (running) {
                 int count = microphone.read(buffer, 0, buffer.length);
-                DatagramPacket packet = new DatagramPacket(buffer, count, ip, targetPort);
-                socket.send(packet);
+                if(count>0) {
+                    DatagramPacket packet = new DatagramPacket(buffer, count, ip, targetPort);
+                    socket.send(packet);
+                }
             }
 
             microphone.stop();

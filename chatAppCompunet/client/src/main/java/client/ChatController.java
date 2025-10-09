@@ -46,6 +46,7 @@ public class ChatController {
     private File lastVoiceFile;
     private VoiceSender currentSender;
     private VoiceReceiver currentReceiver;
+    private boolean inCall=false;
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final File historyFile = new File("client_history_" + System.currentTimeMillis() + ".json");
@@ -90,42 +91,79 @@ public class ChatController {
             String line;
             while ((line = in.readLine()) != null) {
                 final String l = line;
+
+
                 if (l.startsWith("/voicenote")) {
                     handleVoiceNote(l);
                     continue;
                 }
-                Platform.runLater(() -> appendToChat(l));
-                if (l.startsWith("Incoming call from ")) {
-                    String caller = l.substring(19);
 
-                    String[] parts = line.split(":");
-                    String callerIP = parts[1];
-                    int callerSendPort = Integer.parseInt(parts[2]);
-                    int callerReceivePort = Integer.parseInt(parts[3]);
 
-                    Platform.runLater(() -> {
+                if (l.startsWith("/callok")) {
+                    String[] parts = l.split(":");
+                    if (parts.length == 4) {
+                        String ip = parts[1];
+                        int sendPort = Integer.parseInt(parts[2]);
+                        int receivePort = Integer.parseInt(parts[3]);
+
+                        Platform.runLater(() -> appendToChat("Llamada autorizada con " + ip));
+
                         try {
+                            currentSender = new VoiceSender(ip, 6000);
+                            new Thread(currentSender).start();
+
                             currentReceiver = new VoiceReceiver(6000);
                             new Thread(currentReceiver).start();
 
-                            currentSender = new VoiceSender(callerIP, callerSendPort);
-                            new Thread(currentSender).start();
-
-                            appendToChat("Llamada aceptada con " + caller);
-                            startCall.setDisable(true);
-                        } catch (Exception e) {
-                            appendToChat("Error al iniciar la llamada: " + e.getMessage());
+                            Platform.runLater(() -> {
+                                endCall.setDisable(false);
+                                appendToChat("Llamada en curso...");
+                            });
+                        } catch (Exception ex) {
+                            Platform.runLater(() -> appendToChat("Error iniciando audio: " + ex.getMessage()));
+                            ex.printStackTrace();
                         }
-                    });
-
-                } else {
-                    Platform.runLater(() -> appendToChat(l));
+                    } else {
+                        Platform.runLater(() -> appendToChat("Formato inválido en /callok: " + l));
+                    }
+                    continue;
                 }
+
+                if (l.startsWith("Incoming call from ")) {
+                    String caller = l.substring(19);
+                    String[] parts = l.split(":");
+                    if (parts.length >= 4) {
+                        String callerIP = parts[1];
+                        int callerSendPort = Integer.parseInt(parts[2]);
+                        int callerReceivePort = Integer.parseInt(parts[3]);
+
+                        Platform.runLater(() -> {
+                            try {
+                                currentReceiver = new VoiceReceiver(callerReceivePort);
+                                new Thread(currentReceiver).start();
+
+                                currentSender = new VoiceSender(callerIP, callerSendPort);
+                                new Thread(currentSender).start();
+
+                                appendToChat(" Llamada aceptada con " + caller);
+                                startCall.setDisable(true);
+                                endCall.setDisable(false);
+                            } catch (Exception e) {
+                                appendToChat(" Error al iniciar la llamada: " + e.getMessage());
+                            }
+                        });
+                    }
+                    continue;
+                }
+
+                Platform.runLater(() -> appendToChat(l));
             }
+
         } catch (IOException e) {
-            Platform.runLater(() -> appendToChat("Disconnected from server."));
+            Platform.runLater(() -> appendToChat("Desconectado del servidor."));
         }
     }
+
 
     @FXML public void createGroup() {
         String g = targetField.getText().trim();
@@ -227,92 +265,30 @@ public class ChatController {
         String type = targetType.getValue() != null ? targetType.getValue().trim() : "";
 
         if (out == null || socket == null || socket.isClosed()) {
-            Platform.runLater(() -> appendToChat("No estás conectado al servidor."));
+            appendToChat(" No estás conectado al servidor.");
             return;
         }
 
         if (target.isEmpty() || type.isEmpty()) {
-            Platform.runLater(() -> appendToChat("Debes seleccionar un usuario y el tipo de llamada."));
+            appendToChat("⚠ Debes seleccionar un usuario y el tipo de llamada.");
             return;
         }
 
+        if (inCall) {
+            appendToChat(" Ya hay una llamada activa.");
+            return;
+        }
+
+        inCall = true;
+        startCall.setDisable(true);
+        appendToChat(" Solicitando llamada con " + target + "...");
+
+
         new Thread(() -> {
-            try {
-
-                if (type.equalsIgnoreCase("user")) {
-                    out.println("/call " + target);
-                } else {
-                    out.println("/gcall " + target);
-                }
-
-                Platform.runLater(() ->
-                        appendToChat("Solicitud de " + (type.equalsIgnoreCase("user") ? "llamada" : "llamada grupal") + " enviada a " + target + "...")
-                );
-                System.out.println("holi1");
-                String line = in.readLine();
-                System.out.println(line);
-                System.out.println("📩 Respuesta del servidor: '" + line + "'");
-                if (line == null || line.isEmpty()) {
-                    System.err.println("❌ No se recibió nada");
-                    return;
-                }
-
-
-                String[] parts = line.split(":");
-                if (parts.length != 3) {
-                    System.err.println("❌ Formato inválido: " + line);
-                    return;
-                }
-
-                String ip = parts[0];
-                int sendPort = Integer.parseInt(parts[1]);
-                int receivePort = Integer.parseInt(parts[2]);
-
-                System.out.println("holi");
-
-                if (type.equalsIgnoreCase("user")) {
-
-                    System.out.println("holi");
-
-                    Platform.runLater(() -> appendToChat("Llamada autorizada. Iniciando conexión UDP con " + target));
-
-                    currentSender = new VoiceSender(ip, sendPort);
-                    new Thread(currentSender).start();
-
-                    currentReceiver = new VoiceReceiver(receivePort);
-                    new Thread(currentReceiver).start();
-
-                    Platform.runLater(() -> endCall.setDisable(false));
-
-                    startCall.setDisable(true);
-                    System.out.println("Llega hasta aca");
-
-                } else {
-                    /*
-                    CallInfo[] members = gson.fromJson(json, CallInfo[].class);
-
-                    Platform.runLater(() ->
-                            appendToChat("Llamada grupal autorizada. Conectando con " + members.length + " miembros")
-                    );
-
-                    for (CallInfo member : members) {
-                        VoiceSender sender = new VoiceSender(member.getIp(), member.getSendPort());
-                        new Thread(sender).start();
-                    }
-
-                    currentReceiver = new VoiceReceiver(6000); // puerto de escucha fijo
-                    new Thread(currentReceiver).start();
-
-                    Platform.runLater(() -> endCall.setDisable(false));
-
-                    startCall.setDisable(true);
-
-                     */
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Platform.runLater(() -> appendToChat("❌ Error al iniciar la llamada: " + e.getMessage()));
+            if (type.equalsIgnoreCase("user")) {
+                out.println("/call " + target);
+            } else {
+                out.println("/gcall " + target);
             }
         }).start();
     }

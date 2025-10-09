@@ -18,7 +18,15 @@ public class VoiceReceiver implements Runnable {
 
     @Override
     public void run() {
-        try (DatagramSocket socket = new DatagramSocket(listenPort)) {
+        try (DatagramSocket socket = (listenPort == 0) ? new DatagramSocket() : new DatagramSocket(listenPort)) {
+
+            // 👇 Si usamos 0, mostramos el puerto asignado automáticamente
+            if (listenPort == 0) {
+                listenPort = socket.getLocalPort();
+                System.out.println("🎧 Puerto asignado automáticamente: " + listenPort);
+            } else {
+                System.out.println("🎧 Escuchando en puerto fijo: " + listenPort);
+            }
             byte[] buffer = new byte[1024];
 
 
@@ -34,17 +42,13 @@ public class VoiceReceiver implements Runnable {
             while (running) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
+                System.out.println("Prueba Prueba 123");
+                System.out.println("Usando línea de salida: " + speakers.getLineInfo());
+
 
 
                 byte[] audioData = packet.getData();
                 int length = packet.getLength();
-                for (int i = 0; i < length; i += 2) {
-                    short sample = (short)((audioData[i+1] << 8) | (audioData[i] & 0xff));
-                    sample = (short) Math.min(Math.max(sample * gain, Short.MIN_VALUE), Short.MAX_VALUE);
-                    audioData[i] = (byte)(sample & 0xff);
-                    audioData[i+1] = (byte)((sample >> 8) & 0xff);
-                }
-
                 speakers.write(audioData, 0, length);
             }
 
