@@ -202,11 +202,29 @@ public class Server {
                     try (FileOutputStream fos = new FileOutputStream(f)) { fos.write(data); }
                     String notice = "[VOICE NOTE] from " + username + " -> " + target + " saved as " + f.getName();
                     if (type.equalsIgnoreCase("user")) {
-                        sendToUser(target, notice);
+                        ClientHandler targetHandler = clients.get(target);
+                        if (targetHandler != null) {
+                            targetHandler.send("/voicenote user " + username + " " + filename + " " + bytes);
+                            targetHandler.socket.getOutputStream().write(data);
+                            targetHandler.socket.getOutputStream().flush();
+                        }
                     } else {
-                        sendToGroup(target, notice);
+                        Set<String> members = groups.get(target);
+                        if (members != null) {
+                            for (String member : members) {
+                                if (member.equals(username)) continue;
+                                ClientHandler h = clients.get(member);
+                                if (h != null) {
+                                    h.send("/voicenote group " + username + " " + filename + " " + bytes);
+                                    h.socket.getOutputStream().write(data);
+                                    h.socket.getOutputStream().flush();
+                                }
+                            }
+                        }
                     }
+
                     appendHistory(new HistoryRecord("AUDIO", target, "voice:" + f.getName(), f.getName()));
+                    System.out.println("[SERVER] Voice note from " + username + " sent to " + target);
                     break;
                 }
                 case "/call": {

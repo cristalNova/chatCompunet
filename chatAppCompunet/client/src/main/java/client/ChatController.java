@@ -90,6 +90,10 @@ public class ChatController {
             String line;
             while ((line = in.readLine()) != null) {
                 final String l = line;
+                if (l.startsWith("/voicenote")) {
+                    handleVoiceNote(l);
+                    continue;
+                }
                 Platform.runLater(() -> appendToChat(l));
                 if (l.startsWith("Incoming call from ")) {
                     String caller = l.substring(19);
@@ -150,21 +154,24 @@ public class ChatController {
     }
 
     @FXML public void recordVoice() {
-        // record 5 seconds and save wav
+        appendToChat("Iniciando grabacion de voz");
+        AudioFormat fmt = new AudioFormat(44100.0f, 16, 1, true, false);
         try {
-            AudioFormat fmt = new AudioFormat(16000f, 16, 1, true, false);
+
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, fmt);
             if (!AudioSystem.isLineSupported(info)) {
-                appendToChat("Microphone not supported for format.");
+                appendToChat("Microfono no soportado");
                 return;
             }
             TargetDataLine mic = (TargetDataLine) AudioSystem.getLine(info);
             mic.open(fmt);
             mic.start();
-            appendToChat("Recording 5 seconds...");
+
+            appendToChat("Grabando 5 segundos...");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             byte[] buffer = new byte[4096];
             long end = System.currentTimeMillis() + 5000;
+
             while (System.currentTimeMillis() < end) {
                 int r = mic.read(buffer, 0, buffer.length);
                 if (r > 0) baos.write(buffer,0,r);
@@ -174,12 +181,13 @@ public class ChatController {
 
             byte[] audioData = baos.toByteArray();
             File tmp = File.createTempFile("voicenote_", ".wav");
+
             try (FileOutputStream fos = new FileOutputStream(tmp)) {
                 writeWavHeader(fos, audioData.length, fmt);
                 fos.write(audioData);
             }
             lastVoiceFile = tmp;
-            appendToChat("Recorded voice note: " + tmp.getName());
+            appendToChat("Grabacion completa: " + tmp.getName());
             sendVoiceBtn.setDisable(false);
         } catch (Exception e) {
             appendToChat("Recording error: " + e.getMessage());
@@ -193,10 +201,19 @@ public class ChatController {
         if (target.isEmpty()) { appendToChat("Target required"); return; }
         try {
 
-            byte[] bytes = java.nio.file.Files.readAllBytes(lastVoiceFile.toPath());
-            out.println("/voicenote " + type + " " + target + " " + lastVoiceFile.getName() + " " + bytes.length);
+            byte[] rawData = java.nio.file.Files.readAllBytes(lastVoiceFile.toPath());
+            AudioFormat format = new AudioFormat(44100.0f, 16, 1, true, false);
 
-            socket.getOutputStream().write(bytes);
+            ByteArrayOutputStream wavStream = new ByteArrayOutputStream();
+            writeWavHeader(wavStream, rawData.length, format);
+            wavStream.write(rawData);
+            byte[] wavBytes = wavStream.toByteArray();
+
+
+            out.println("/voicenote " + type + " " + target + " " + lastVoiceFile.getName() + " " + wavBytes.length);
+            out.flush();
+
+            socket.getOutputStream().write(wavBytes);
             socket.getOutputStream().flush();
             appendToChat("Sent voice note to " + type + ":" + target);
             appendHistory("AUDIO", type + ":" + target, "voice:" + lastVoiceFile.getName(), lastVoiceFile.getName());
@@ -317,6 +334,7 @@ public class ChatController {
 
             appendToChat("Llamada finalizada.");
             endCall.setDisable(true);
+            startCall.setDisable(false);
 
             out.println("/endcall");
 
@@ -365,6 +383,82 @@ public class ChatController {
         dos.writeShort(Short.reverseBytes((short)16));
         dos.writeBytes("data");
         dos.writeInt(Integer.reverseBytes(dataLen));
+    }
+    public void startListening() {
+        new Thread(() -> {
+            try {
+                String line;
+                while ((line = in.readLine()) != null) {
+                    if (line.startsWith("/voicenote")) {
+                        handleVoiceNote(line);
+                    } else {
+                        final String msg=line;
+                        Platform.runLater(() -> appendToChat(msg));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> appendToChat("❌ Error en recepción: " + e.getMessage()));
+            }
+        }).start();
+    }
+
+
+    private void handleVoiceNote(String header) {
+        try {
+
+            String[] parts = header.split(" ");
+            if (parts.length < 5) {
+                System.err.println("Formato inválido de encabezado: " + header);
+                return;
+            }
+
+            String type = parts[1];
+            String sender = parts[2];
+            String fileName = parts[3];
+            int length = Integer.parseInt(parts[4]);
+
+            appendToChat("📩 Recibiendo nota de voz de " + sender + " (" + length + " bytes)");
+
+            byte[] audioBytes = new byte[length];
+            InputStream is = socket.getInputStream();
+
+            int totalRead = 0;
+            while (totalRead < length) {
+                int bytesRead = is.read(audioBytes, totalRead, length - totalRead);
+                if (bytesRead == -1) break;
+                totalRead += bytesRead;
+            }
+
+
+            receiveVoiceNote(fileName, audioBytes);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Platform.runLater(() -> appendToChat(" Error al recibir voz: " + e.getMessage()));
+        }
+    }
+
+    private void receiveVoiceNote(String fileName, byte[] audioBytes) {
+        try {
+            File receivedFile = new File("received_" + fileName);
+            try (FileOutputStream fos = new FileOutputStream(receivedFile)) {
+                fos.write(audioBytes);
+            }
+
+            Platform.runLater(() -> appendToChat("Nota de voz recibida: " + fileName));
+
+            AudioInputStream ais = AudioSystem.getAudioInputStream(receivedFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(ais);
+            clip.start();
+
+            Platform.runLater(() -> appendToChat("Reproduciendo nota de voz..."));
+
+        } catch (Exception e) {
+            Platform.runLater(() -> appendToChat(" Error al reproducir nota de voz: " + e.getMessage()));
+            e.printStackTrace();
+        }
     }
 
     static class HistoryRecord {

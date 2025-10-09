@@ -1,0 +1,29 @@
+[
+  {
+    "type": "TEXT",
+    "target": "user:Hola",
+    "content": "Hola",
+    "timestamp": 1760032499608
+  },
+  {
+    "type": "AUDIO",
+    "target": "user:Hola",
+    "content": "voice:voicenote_2580428234032589348.wav",
+    "audioFile": "voicenote_2580428234032589348.wav",
+    "timestamp": 1760032516599
+  },
+  {
+    "type": "AUDIO",
+    "target": "user:Hola",
+    "content": "voice:voicenote_2580428234032589348.wav",
+    "audioFile": "voicenote_2580428234032589348.wav",
+    "timestamp": 1760032517991
+  },
+  {
+    "type": "AUDIO",
+    "target": "user:Hola",
+    "content": "voice:voicenote_2580428234032589348.wav",
+    "audioFile": "voicenote_2580428234032589348.wav",
+    "timestamp": 1760032518677
+  }
+]
