@@ -1,8 +1,9 @@
 [
   {
     "type": "TEXT",
+    "sender": "juan",
     "target": "user:maria",
     "content": "holi",
-    "timestamp": 1759889737171
+    "timestamp": 1760071372503
   }
 ]
