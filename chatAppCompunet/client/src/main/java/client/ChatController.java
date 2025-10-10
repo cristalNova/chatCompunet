@@ -42,11 +42,11 @@ public class ChatController {
     private BufferedReader in;
     private PrintWriter out;
     private String username;
-    private Consumer<String> uiUpdater;
     private File lastVoiceFile;
     private VoiceSender currentSender;
     private VoiceReceiver currentReceiver;
     private boolean inCall=false;
+    InputStream inputStream;
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final File historyFile = new File("client_history_" + System.currentTimeMillis() + ".json");
@@ -67,6 +67,7 @@ public class ChatController {
             socket = new Socket("localhost", 5000);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            inputStream = socket.getInputStream();
 
 
             String welcome = in.readLine();
@@ -81,6 +82,8 @@ public class ChatController {
             recordVoiceBtn.setDisable(false);
             connectBtn.setDisable(true);
             nameField.setDisable(true);
+            restoreHistory();
+
         } catch (Exception e) {
             appendToChat("Connection error: " + e.getMessage());
         }
@@ -155,6 +158,47 @@ public class ChatController {
                     }
                     continue;
                 }
+
+                if (l.startsWith("/voicenote")) {
+                    String[] parts = l.split(" ", 5);
+                    if (parts.length < 5) {
+                        appendToChat("Formato incorrecto de /voicenote");
+                        continue;
+                    }
+
+                    String type = parts[1];
+                    String sender = parts[2];
+                    String filename = parts[3];
+                    int bytes = Integer.parseInt(parts[4]);
+
+                    try {
+                        
+                        byte[] data = inputStream.readNBytes(bytes);
+
+                        Platform.runLater(() -> {
+                            try {
+                                
+                                appendToChat("Nota de voz recibida de " + sender + ": " + filename);
+
+                                
+                                receiveVoiceNote(filename, data);
+
+                                
+                                appendHistory(type, sender, "[Voice note] " + filename, filename);
+
+                            } catch (Exception e) {
+                                appendToChat("Error al procesar nota de voz: " + e.getMessage());
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        appendToChat("Error al recibir los bytes de la nota de voz: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+
+                    continue;
+                }
+
 
                 Platform.runLater(() -> appendToChat(l));
             }
@@ -325,7 +369,7 @@ public class ChatController {
 
     private void appendHistory(String type, String target, String content, String audioFile) {
         try {
-            HistoryRecord rec = new HistoryRecord(type, target, content, audioFile);
+            HistoryRecord rec = new HistoryRecord(type, username, target, content, audioFile);
             java.util.List<HistoryRecord> list = new java.util.ArrayList<>();
             if (historyFile.exists()) {
                 HistoryRecord[] arr = gson.fromJson(new FileReader(historyFile), HistoryRecord[].class);
@@ -397,11 +441,11 @@ public class ChatController {
             appendToChat("📩 Recibiendo nota de voz de " + sender + " (" + length + " bytes)");
 
             byte[] audioBytes = new byte[length];
-            InputStream is = socket.getInputStream();
 
             int totalRead = 0;
             while (totalRead < length) {
-                int bytesRead = is.read(audioBytes, totalRead, length - totalRead);
+
+                int bytesRead = inputStream.read(audioBytes, totalRead, length - totalRead);
                 if (bytesRead == -1) break;
                 totalRead += bytesRead;
             }
@@ -424,12 +468,19 @@ public class ChatController {
 
             Platform.runLater(() -> appendToChat("Nota de voz recibida: " + fileName));
 
-            AudioInputStream ais = AudioSystem.getAudioInputStream(receivedFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(ais);
-            clip.start();
+            new Thread(() -> {
+                try (AudioInputStream ais = AudioSystem.getAudioInputStream(receivedFile)) {
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(ais);
+                    clip.start();
+                    Thread.sleep(clip.getMicrosecondLength() / 1000);
+                    clip.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> appendToChat("Error al reproducir nota de voz: " + e.getMessage()));
+                }
+            }).start();
 
-            Platform.runLater(() -> appendToChat("Reproduciendo nota de voz..."));
 
         } catch (Exception e) {
             Platform.runLater(() -> appendToChat(" Error al reproducir nota de voz: " + e.getMessage()));
@@ -438,7 +489,59 @@ public class ChatController {
     }
 
     static class HistoryRecord {
-        String type; String target; String content; String audioFile; long timestamp = System.currentTimeMillis();
-        HistoryRecord(String t, String tg, String c, String af) { type=t; target=tg; content=c; audioFile=af; }
+        String type; 
+        String sender;
+        String target; 
+        String content; 
+        String audioFile; 
+        long timestamp = System.currentTimeMillis();
+        HistoryRecord(String t, String s, String tg, String c, String af) { type=t; sender=s; target=tg; content=c; audioFile=af; }
     }
+
+    private void restoreHistory() {
+        System.out.println("Restaurando historial desde archivos JSON...");
+        File historyDir = new File(System.getProperty("user.dir"), "../client");
+
+        if (!historyDir.exists() || !historyDir.isDirectory()) {
+            appendToChat("No history directory found.");
+            return;
+        }
+
+        File[] jsonFiles = historyDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
+        if (jsonFiles == null || jsonFiles.length == 0) {
+            appendToChat("No history files found.");
+            return;
+        }
+
+        for (File file : jsonFiles) {
+            try (FileReader reader = new FileReader(file)) {
+                HistoryRecord[] records = gson.fromJson(reader, HistoryRecord[].class);
+                if (records == null) continue;
+
+                for (HistoryRecord r : records) {
+                    String direction;
+                    String connector;
+                    String line;
+                    String timestampStr = "[" + new java.util.Date(r.timestamp) + "]";
+                    if (username.equals(r.sender)) {
+                        direction = "sent";
+                        connector = "to";
+                        line = timestampStr + " " + direction + " " + r.type + " " +connector + " " + r.target + ": " + r.content;
+                    } else if (("user:"+username).equals(r.target)) {
+                        direction = "received";
+                        connector = "from";
+                        line = timestampStr + " " + direction + " " + r.type + " " +connector + " " + r.sender + ": " + r.content;
+                    } else {
+                        continue;
+                    }
+                    
+                    appendToChat(line);
+                }
+
+            } catch (Exception e) {
+                appendToChat("Error reading history file " + file.getName() + ": " + e.getMessage());
+            }
+        }
+    }
+
 }
