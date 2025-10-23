@@ -1,0 +1,29 @@
+# Gradle
+.gradle/
+build/
+
+# IDEs
+.vscode/
+.idea/
+
+# Archivos específicos del sistema
+*.log
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno (si los hay)
+.env
+*.env.local
+
+# Dependencias
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+.out/

@@ -717,5 +717,17 @@
     "target": "maria",
     "content": "juan: holi",
     "timestamp": 1760071372524
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "maria has joined",
+    "timestamp": 1760111492798
+  },
+  {
+    "type": "TEXT",
+    "target": "maria",
+    "content": "maria: hi",
+    "timestamp": 1760111513358
   }
 ]
