@@ -2,6 +2,8 @@ const Button = (config) => {
     const btn = document.createElement("button");
     btn.classList.add("action-btn");
 
+    btn.type = config.type || "button";
+
     if (config.text) {
         const textElement = document.createElement("span");
         textElement.textContent = config.text;

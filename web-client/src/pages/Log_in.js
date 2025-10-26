@@ -5,12 +5,23 @@ import Title from "../components/Title.js";
 const Login = () => {
     const loginPage = document.createElement("div");
     loginPage.classList.add("login-page");
+
+    const form = document.createElement("form");
+    form.classList.add("login-form");
+
     const title = Title("Welcome to Chat App");
-    loginPage.appendChild(title);
+    form.appendChild(title);
+
     const input = TextInput("Username","");
-    loginPage.appendChild(input);
-    const btnLogin = Button("Log In");
-    loginPage.appendChild(btnLogin);
+    form.appendChild(input);
+    const btnLogin = Button({
+        text: "Log In",
+        icon: "",
+        type: "submit"
+    });
+    form.appendChild(btnLogin);
+    
+    loginPage.appendChild(form);
 
     return loginPage;
 }
