@@ -15,9 +15,6 @@
     --green: #79792E;
     --light-yellow:#F2DD6C;
     --dark-gray: #C4BEAD;
-
-    /*Hover*/
-    --text-white-hover:#4fbabf;
 }
 
 body{
@@ -30,10 +27,16 @@ body{
     width: 100%;
 }
 
-.chat-page{
+.chat-page, .login-page{
     height: 100%;
     width: 100%;
     display: flex;
+}
+
+.login-page{
+    align-items: center;
+    justify-content: center;
+    background-color: var(--grey);
 }
 
 .text{
@@ -149,4 +152,30 @@ body{
 .group-header .action-btn{
     width: 2.5rem;
     height: 2.5rem;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 30%;
+    background-color: var(--light-yellow);
+    padding: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+}
+
+.login-form .title{
+    color: var(--dark-brown);
+}
+
+.login-form .input-bar{
+    flex: 0;
+    width: 100%;
+}
+
+.login-form .action-btn{
+    width: auto;
+    padding: 0 1rem;
 }

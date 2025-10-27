@@ -2,7 +2,7 @@ import  Chat from "../pages/Chat.js";
 import  Log_in  from "../pages/Log_in.js";
 import { Router } from "./Router.js";
 
-const urls = {
+export const urls = {
     "/": Log_in,
     "/chat": Chat,
 }
