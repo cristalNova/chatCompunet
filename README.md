@@ -1,4 +1,4 @@
-# Proyecto chat 
+# Proyecto chat (Versión II) 
 
 ### Integrantes:
 
@@ -7,53 +7,36 @@
 
 ### Instrucciones para ejecución:
 
-1. Ejecutar clase server.
+1. Compilar y ejecutar clase server.
    
-   **Opción 1:**
-         
-     - Ingresar a carpete destino:
+   - Ingresar a carpete raiz:
+   - Realizar:
   
-             cd chatAppCompunet\server\src\main\java\server
-    - Realizar:
-  
-            gradle run
+            .\gradlew build
+     
+   Esto compilará el proyecto y generará el archivo .jar en build/libs/.
+   - Ejecutamos
+     
+      ```bash
+      java -jar build/libs/server.jar
     
-    **Opción 2:**
-
-    Desde la raíz del proyecto:
-
-    - Ingresar a carpeta
-            
-            cd chatCompunet
-    - Ejecutar
-            
-            gradle :server:run
-1. Ejecutar la clase ClientApp
+2. Ejecutar el proxy
     
-    **Opción 1:**
-         
+    -Abrir otra terminal
     - Ingresar a carpete destino:
   
-             cd chatAppCompunet\client\src\main\java\client
+             cd chatCompunet\web-client\proxy 
     - Ejecutar en consola:
   
-            gradle run
-    
-    **Opción 2:**
+            node index.js
+    El frontend se levantara y será accesible en:
+            http://localhost:3000
 
-    Desde la raíz del proyecto:
-
-    - Ingresar a carpeta:
-            
-            cd chatCompunet
-    - Ejecutar:
-            
-            gradle :client:run
   
-1. Una vez ejecutada la clase ClientApp, dirígase a la barra de tareas y selecciona la ventana de la aplicación JavaFX que se ha desplegado. Ábrala para comenzar a utilizar el chat.
+1. Una vez ejecutado el proxy, dirígase a http://localhost:3000
 
 ### Instrucciones generales para uso:
 
-- En la parte superior debe ingresar el nombre de usuario por el que será reconocido, posteriormente presione el botón *Conectar*.
-- En la barra lateral derecha encontrará los comandos para ejecutar acciones en el chat.
-- Para hacer envío de mensajes, comenzar llamada o enviar audio ya sea de forma grupal o a un usuario en específico se debe de ingresar en el campo *target* el nombre por el que se reconoce el destino y seleccionar si el comando será tipo *group* o *user*.
+- En el login debe ingresar el nombre de usuario por el que será reconocido, posteriormente presione el botón *Conectar*.
+- En la barra lateral izquierda encontrará los usuarios conectados y grupos existentes en el chat.
+- Para hacer envío de mensajes ya sea de forma grupal o a un usuario en específico se debe de hacer click en el nombre de usuario o grupo destino y una vez lo haya seleccionado puede enviar un mensaje.
