@@ -179,3 +179,130 @@ body{
     width: auto;
     padding: 0 1rem;
 }
+
+
+.messages-container {
+  flex: 1; 
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scroll-behavior: smooth;
+}
+
+.chat-message {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  font-family: 'Anonymous Pro';
+}
+
+
+.chat-message.sent {
+  background-color: #0084ff;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 2px;
+  font-family: 'Anonymous Pro';
+}
+
+
+.chat-message.received {
+  background-color: #e4e6eb;
+  color: black;
+  align-self: flex-start;
+  border-bottom-left-radius: 2px;
+  font-family: 'Anonymous Pro';
+}
+.chat-message.system {
+    background-color: transparent;
+    color: #888;
+    text-align: center;
+    font-style: italic;
+}
+
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.target-username{
+    font-family: 'Anonymous Pro';
+}
+.contact-item{
+    cursor: pointer;
+    padding: 0.5rem 0.5rem;
+    width: 100%;
+    text-align: center;
+    font-family: 'Anonymous Pro';
+}
+
+.prompt-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; 
+}
+
+.prompt-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.prompt-box label {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Anonymous Pro';
+}
+
+.prompt-box input[type="text"] {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Anonymous Pro';
+}
+
+.prompt-box button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.prompt-box button:first-of-type {
+    background-color: var(--dark-yellow);
+    color: white;
+    font-family: 'Anonymous Pro';
+}
+
+.prompt-box button:last-of-type {
+    background-color: var(--grey);
+    color: black;
+    font-family: 'Anonymous Pro';
+}

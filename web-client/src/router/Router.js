@@ -1,7 +1,6 @@
-export const Router = (paths) => {
-
+// Router.js
+export const Router = async (paths) => {
     const route = window.location.pathname;
-
     const state = window.history.state || {};
 
     const routeComponent = paths[route] || (() => {
@@ -10,10 +9,10 @@ export const Router = (paths) => {
         return notFound;
     });
 
-    return routeComponent(state);
-
+    return await routeComponent(state); // ⚠️ soporta async
 };
 
+// ✅ Exportar navigate para poder usarlo en Login.js
 export const navigate = (path, params = {}) => {
     window.history.pushState(params, "", path);
     window.renderApp();

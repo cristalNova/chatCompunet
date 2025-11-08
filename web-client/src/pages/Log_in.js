@@ -21,14 +21,21 @@ const Login = () => {
         type: "submit"
     });
 
-    form.onsubmit = (event) => {
-        event.preventDefault();
-        const username = input.value.trim();
-        if (!username) return;
+    form.onsubmit = async (event) => {
+    event.preventDefault();
+    const username = input.value.trim();
+    if (!username) return;
 
-        navigate("/chat", { username });
+    
+    await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username })
+    });
 
-    }
+    
+    navigate("/chat", { username });
+}
 
     form.appendChild(btnLogin);
 
