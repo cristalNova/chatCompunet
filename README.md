@@ -39,4 +39,17 @@
 
 - En el login debe ingresar el nombre de usuario por el que será reconocido, posteriormente presione el botón *Conectar*.
 - En la barra lateral izquierda encontrará los usuarios conectados y grupos existentes en el chat.
+- Para crear un grupo, usar el botón de + en la sección de grupos.
+- Para unirse a un grupo existente, usar el botón "Join" junto al nombre del grupo.
 - Para hacer envío de mensajes ya sea de forma grupal o a un usuario en específico se debe de hacer click en el nombre de usuario o grupo destino y una vez lo haya seleccionado puede enviar un mensaje.
+
+## Descripción del Sistema
+
+Este proyecto implementa un sistema de chat con soporte para mensajes individuales y de grupos. La comunicación sigue este flujo:
+
+1. **Cliente (frontend)**: interfaz en Node.js donde los usuarios pueden enviar y recibir mensajes.
+2. **Proxy / API**: maneja las peticiones del frontend y las traduce a mensajes que el servidor Java puede entender.
+3. **Servidor Backend (Java)**: administra usuarios, grupos y mantiene el historial de mensajes en un archivo JSON. También envía mensajes a los clientes correspondientes (individuales o grupos).
+
+---
+
