@@ -1,0 +1,464 @@
+[
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has joined",
+    "timestamp": 1763421879928
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "h has joined",
+    "timestamp": 1763512388583
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "h has joined",
+    "timestamp": 1763512697411
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has joined",
+    "timestamp": 1763512938771
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has left",
+    "timestamp": 1763513154149
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "g has joined",
+    "timestamp": 1763513285778
+  },
+  {
+    "type": "TEXT",
+    "target": "g",
+    "content": "g: GG",
+    "timestamp": 1763513328893
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "g has left",
+    "timestamp": 1763513949926
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "V has joined",
+    "timestamp": 1763516061506
+  },
+  {
+    "type": "TEXT",
+    "target": "V",
+    "content": "V: H",
+    "timestamp": 1763516065638
+  },
+  {
+    "type": "TEXT",
+    "target": "V",
+    "content": "V: HH",
+    "timestamp": 1763516079600
+  },
+  {
+    "type": "TEXT",
+    "target": "V",
+    "content": "V: d",
+    "timestamp": 1763516136862
+  },
+  {
+    "type": "TEXT",
+    "target": "V",
+    "content": "V: HH",
+    "timestamp": 1763517434023
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has joined",
+    "timestamp": 1763617368616
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has joined",
+    "timestamp": 1763617999643
+  },
+  {
+    "type": "TEXT",
+    "target": "F",
+    "content": "H: H",
+    "timestamp": 1763618034931
+  },
+  {
+    "type": "TEXT",
+    "target": "H",
+    "content": "F: GG",
+    "timestamp": 1763618045595
+  },
+  {
+    "type": "TEXT",
+    "target": "GG",
+    "content": "H: QUEEE",
+    "timestamp": 1763618290531
+  },
+  {
+    "type": "TEXT",
+    "target": "H",
+    "content": "F: SS",
+    "timestamp": 1763618305027
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has left",
+    "timestamp": 1763618436937
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has joined",
+    "timestamp": 1763618460558
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has joined",
+    "timestamp": 1763618461961
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has left",
+    "timestamp": 1763618540653
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SD has joined",
+    "timestamp": 1763618547655
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SD has left",
+    "timestamp": 1763618914901
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "S has joined",
+    "timestamp": 1763618922661
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has joined",
+    "timestamp": 1763618943127
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "S has left",
+    "timestamp": 1763619723663
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has left",
+    "timestamp": 1763619723672
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has joined",
+    "timestamp": 1763619741135
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "JP has joined",
+    "timestamp": 1763619745769
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "JP has left",
+    "timestamp": 1763619900251
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has joined",
+    "timestamp": 1763619908919
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SS has joined",
+    "timestamp": 1763619918019
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "H has joined",
+    "timestamp": 1763620130215
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "JJ has joined",
+    "timestamp": 1763620269221
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "F has left",
+    "timestamp": 1763620478154
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SS has joined",
+    "timestamp": 1763647534389
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "Grea has joined",
+    "timestamp": 1763650488357
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SS has left",
+    "timestamp": 1763650525154
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "Grea has left",
+    "timestamp": 1763650525154
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "HH has joined",
+    "timestamp": 1763650539057
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "DD has joined",
+    "timestamp": 1763650543024
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "DD has left",
+    "timestamp": 1763651241267
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "FF has joined",
+    "timestamp": 1763651265760
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "GG has joined",
+    "timestamp": 1763651271292
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "GG has left",
+    "timestamp": 1763651594153
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "WS has joined",
+    "timestamp": 1763651618933
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SW has joined",
+    "timestamp": 1763651622551
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "WS has left",
+    "timestamp": 1763651805528
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "SA has joined",
+    "timestamp": 1763651819842
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AS has joined",
+    "timestamp": 1763651822315
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AS has left",
+    "timestamp": 1763652280663
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "jJ has joined",
+    "timestamp": 1763652294934
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AS has joined",
+    "timestamp": 1763652303597
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AS has left",
+    "timestamp": 1763652884772
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "jJ has left",
+    "timestamp": 1763652884778
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has joined",
+    "timestamp": 1763652907972
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has joined",
+    "timestamp": 1763652909539
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has left",
+    "timestamp": 1763653082057
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has joined",
+    "timestamp": 1763653089891
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has joined",
+    "timestamp": 1763653096879
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has left",
+    "timestamp": 1763653655364
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has joined",
+    "timestamp": 1763653662635
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has joined",
+    "timestamp": 1763653669462
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has left",
+    "timestamp": 1763654109831
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has joined",
+    "timestamp": 1763654119210
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "WW has joined",
+    "timestamp": 1763654126370
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "WW has left",
+    "timestamp": 1763655189115
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has joined",
+    "timestamp": 1763655208368
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has joined",
+    "timestamp": 1763655212768
+  },
+  {
+    "type": "TEXT",
+    "target": "BB",
+    "content": "AA: Hola",
+    "timestamp": 1763655417542
+  },
+  {
+    "type": "TEXT",
+    "target": "AA",
+    "content": "BB: A",
+    "timestamp": 1763655423014
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has left",
+    "timestamp": 1763661449580
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has joined",
+    "timestamp": 1763662080222
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "BB has joined",
+    "timestamp": 1763662089437
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "AA has left",
+    "timestamp": 1763663195993
+  }
+]

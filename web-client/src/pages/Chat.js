@@ -2,34 +2,35 @@ import ChatArea from "../components/ChatArea.js";
 import ContactSideBar from "../components/ContactSideBar.js";
 import OutputBar from "../components/OutputBar.js";
 import UserUpperBar from "../components/UserUpperBar.js";
+import Player from "../components/Player.js";
+import delegate from "../services/delegate.js";
+
 
 const ChatPage = async (params = {}) => {
     const chatPage = document.createElement("div");
     chatPage.classList.add("chat-page");
 
+    delegate.init();
+
+
     const username = params.username || "Invitado";
     let targetUser = null;
-    let isGroup = false; // <-- nueva variable
+    let isGroup = false; 
     let allMessages = [];
 
     const handleUserSelect = (user, group = false) => {
+        targetUser = user;
+        isGroup = group;
 
-    
-    targetUser = user;
-    isGroup = group;
+        userUpperBar.querySelector(".target-username")?.remove();
+        const targetLabel = document.createElement("span");
+        targetLabel.classList.add("target-username");
+        targetLabel.textContent = group ? `Grupo: ${targetUser}` : `Chat con: ${targetUser}`;
+        userUpperBar.appendChild(targetLabel);
 
-
-
-    userUpperBar.querySelector(".target-username")?.remove();
-    const targetLabel = document.createElement("span");
-    targetLabel.classList.add("target-username");
-    targetLabel.textContent = group ? `Grupo: ${targetUser}` : `Chat con: ${targetUser}`;
-    userUpperBar.appendChild(targetLabel);
-
-    outputBar.setTarget(targetUser, isGroup);
-    
-    displayFilteredMessages(targetUser, isGroup);
-};
+        outputBar.setTarget(targetUser, isGroup);
+        displayFilteredMessages(targetUser, isGroup);
+    };
 
     const contactSideBar = ContactSideBar(handleUserSelect, username);
     chatPage.appendChild(contactSideBar);
@@ -41,49 +42,66 @@ const ChatPage = async (params = {}) => {
     const { chatArea, messagesContainer } = ChatArea();
     const outputBar = OutputBar(username, messagesContainer, allMessages);
 
+delegate.subscribe((payload) => {
+  console.log("SUBSCRIBE payload recibido:", payload);
+
+  if (payload.type === "AUDIO") {
+    
+    if (payload.to === username && window.player && window.player.playBase64) {
+      window.player.playBase64(payload.data);
+    }
+    return;
+  }
+
+});
+
+
+    
+    const player = Player();
+    rightSide.appendChild(player.element);
+
+    window.player = player;
+
     rightSide.appendChild(userUpperBar);
     rightSide.appendChild(chatArea);
     rightSide.appendChild(outputBar);
     chatPage.appendChild(rightSide);
 
+   
     const displayFilteredMessages = (target, group = false) => {
-    messagesContainer.innerHTML = "";
-    if (!target) return;
+        messagesContainer.innerHTML = "";
+        if (!target) return;
 
-    allMessages.forEach(msg => {
-        if (msg.type !== "TEXT") return;
+        allMessages.forEach(msg => {
+            if (msg.type !== "TEXT") return;
 
-        let content = msg.content;
-        let from = "";
-        let to = msg.target;
+            let content = msg.content;
+            let from = "";
+            let to = msg.target;
 
-        
-        if (content.includes(":")) {
-            const parts = content.split(":");
-            from = parts[0].trim();
-            content = parts.slice(1).join(":").trim();
-        }
+            if (content.includes(":")) {
+                const parts = content.split(":");
+                from = parts[0].trim();
+                content = parts.slice(1).join(":").trim();
+            }
 
-        if (group) {
-            
-            if (to !== target) return;
-        } else {
-            
-            if (!((from === username && to === target) || (from === target && to === username))) return;
-        }
+            if (group) {
+                if (to !== target) return;
+            } else {
+                if (!((from === username && to === target) || (from === target && to === username))) return;
+            }
 
-        const msgDiv = document.createElement("div");
-        const isSent = from === username;
-        msgDiv.classList.add("chat-message", isSent ? "sent" : "received");
-        msgDiv.textContent = content;
-        messagesContainer.appendChild(msgDiv);
-    });
+            const msgDiv = document.createElement("div");
+            const isSent = from === username;
+            msgDiv.classList.add("chat-message", isSent ? "sent" : "received");
+            msgDiv.textContent = content;
+            messagesContainer.appendChild(msgDiv);
+        });
 
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-};
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    };
 
-
-
+    
     const refreshMessages = async () => {
         try {
             const response = await fetch("http://localhost:3000/api/history");
