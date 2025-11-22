@@ -1,0 +1,134 @@
+[
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Cristina: Hola Juan Pablo",
+    "timestamp": 1763830562905
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo1",
+    "content": "Cristina: Hola Juan Pablo",
+    "timestamp": 1763830781241
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo1",
+    "content": "Cristina: asd",
+    "timestamp": 1763830785458
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo1",
+    "content": "Cristina: hola",
+    "timestamp": 1763830872289
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Juan Pablo: Hola Cristina",
+    "timestamp": 1763831473338
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Cristina: Hola Juan Pablo",
+    "timestamp": 1763831484078
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Cristina: awd",
+    "timestamp": 1763831487268
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Cristina: awdawd",
+    "timestamp": 1763831490268
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Juan Pablo: awd",
+    "timestamp": 1763831493263
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Juan Pablo: awdawdawd",
+    "timestamp": 1763831499718
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo X",
+    "content": "Juan Pablo: awd",
+    "timestamp": 1763831502497
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo",
+    "content": "Juan Pablo: Hola",
+    "timestamp": 1763831776399
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo",
+    "content": "Juan Pablo: awdad",
+    "timestamp": 1763831801584
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo",
+    "content": "Cristina: awdawd",
+    "timestamp": 1763831829228
+  },
+  {
+    "type": "TEXT",
+    "target": "GRUPO X",
+    "content": "Juan Pablo: Hola Cristina",
+    "timestamp": 1763832519276
+  },
+  {
+    "type": "TEXT",
+    "target": "GRUPO X",
+    "content": "Cristina: Hola Juan Pablo",
+    "timestamp": 1763832532396
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Juan Pablo: Hola Cristina, como estas?",
+    "timestamp": 1763833157685
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Cristina: Bien Juan Pablo y tu ?",
+    "timestamp": 1763833168875
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Juan: Hola Cristina, como vas ?",
+    "timestamp": 1763833468095
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Cristina: Hola, bien y vos?",
+    "timestamp": 1763833480253
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Juan: Hola Cristina, como vas ?",
+    "timestamp": 1763833860299
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Cristina: Hola Juan, todo bien malparido \u003d)",
+    "timestamp": 1763833871415
+  }
+]

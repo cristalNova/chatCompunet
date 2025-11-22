@@ -1,5 +1,6 @@
 import Button from "./ActionButton.js";
 import TextInput from "./InputMessageBar.js";
+import iceDelegate from "../services/iceDelegate.js";
 
 const OutputBar = (currentUser, messagesContainer, allMessages) => {
     let targetUser = null;
@@ -63,23 +64,17 @@ const OutputBar = (currentUser, messagesContainer, allMessages) => {
 
 
    try {
-    
-
-    const response = await fetch("http://localhost:3000/api/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-    
-    
-    
-    const result = await response.json();
-    
-} catch (err) {
-    console.error("Error completo:", err);
-    console.error("Error message:", err.message);
-    console.error("Error stack:", err.stack);
-}
+        if (isGroup) {
+            await iceDelegate.sendGroupMessage(targetUser, message);
+        } else {
+            await iceDelegate.sendMessage(targetUser, message);
+        }
+        console.log("Mensaje enviado via Ice");
+    } catch (err) {
+        console.error("Error completo:", err);
+        console.error("Error message:", err.message);
+        console.error("Error stack:", err.stack);
+    }
 });
 
 // Método para cambiar el target

@@ -2,6 +2,7 @@ import Button from "../components/ActionButton.js";
 import TextInput from "../components/InputMessageBar.js";
 import Title from "../components/Title.js";
 import { navigate } from "../router/Router.js";
+import iceDelegate from "../services/iceDelegate.js";
 
 const Login = () => {
     const loginPage = document.createElement("div");
@@ -22,20 +23,23 @@ const Login = () => {
     });
 
     form.onsubmit = async (event) => {
-    event.preventDefault();
-    const username = input.value.trim();
-    if (!username) return;
+        event.preventDefault();
+        const username = input.value.trim();
+        if (!username) return;
 
-    
-    await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username })
-    });
-
-    
-    navigate("/chat", { username });
-}
+        try {
+            // Conectar via Ice en lugar de HTTP
+            console.log('[Login] Connecting to Ice server...');
+            await iceDelegate.init(username);
+            console.log('[Login] Connected successfully!');
+            
+            // Navegar al chat
+            navigate("/chat", { username });
+        } catch (error) {
+            console.error('[Login] Error connecting to Ice:', error);
+            alert('Error al conectar con el servidor Ice. Verifica que el servidor esté corriendo.');
+        }
+    }
 
     form.appendChild(btnLogin);
 

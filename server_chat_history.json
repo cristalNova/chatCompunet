@@ -730,5 +730,23 @@
     "target": "ALL",
     "content": "HH has left",
     "timestamp": 1762641914476
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "Sebastian has joined",
+    "timestamp": 1763824394670
+  },
+  {
+    "type": "TEXT",
+    "target": "Grupo 1",
+    "content": "Sebastian: Hola grupo, que tal?",
+    "timestamp": 1763824465082
+  },
+  {
+    "type": "SYSTEM",
+    "target": "ALL",
+    "content": "Sebastian has left",
+    "timestamp": 1763825816700
   }
 ]
