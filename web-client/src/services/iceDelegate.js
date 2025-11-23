@@ -1,5 +1,6 @@
 // IceDelegate.js - Maneja la conexión Ice y las llamadas RPC
 
+import ContactSideBar from '../components/ContactSideBar.js';
 import Subscriber from './subscriber.js';
 
 export class IceDelegate {
@@ -9,11 +10,22 @@ export class IceDelegate {
         this.subject = null;
         this.subscriber = new Subscriber(this);
         this.callbacks = [];
-        this.currentUser = null;
+        this.currentUser = null;  
+        this.voiceService = null;    
+        this.callCallbacks = {
+            onChunk: [],
+            onStart: [],
+            onStop: []
+        };  
     }
+
 
     async init(username) {
         if (this.chatService) {
+            return; // Ya inicializado
+        }
+
+        if (this.voiceService) {
             return; // Ya inicializado
         }
 
@@ -31,6 +43,17 @@ export class IceDelegate {
             this.chatService = Chat.ChatServicePrx.uncheckedCast(chatServiceProxy);
 
             console.log('[Ice] ChatService proxy created:', this.chatService);
+
+
+            const baseVoice = this.communicator.stringToProxy(
+                `VoiceService:ws -h ${hostname} -p ${port}`
+            );
+            console.log("Base proxy voiceService:", baseVoice);
+
+            this.voiceService = Chat.VoiceServicePrx.uncheckedCast(baseVoice);
+            console.log("VoiceService proxy:", this.voiceService);
+
+
 
             // Conectar al Subject para callbacks
             const subjectProxy = this.communicator.stringToProxy(
@@ -167,6 +190,62 @@ export class IceDelegate {
         });
     }
 
+    // ========== VoiceService ==========
+
+    async startCall(from, to) {
+        return await this.voiceService.startCall(from, to);
+    }
+
+    async stopCall(from, to) {
+        return await this.voiceService.stopCall(from, to);
+    }
+
+    async sendCallChunk(chunkData) {
+        if (!this.voiceService) {
+            throw new Error('VoiceService not initialized');
+        }
+
+        // Crear instancia de CallChunk correctamente
+        const chunk = new Chat.CallChunk();
+        chunk.from = chunkData.from;
+        chunk.to = chunkData.to;
+        chunk.seq = chunkData.seq;
+        chunk.data = chunkData.data;        
+        chunk.timestamp = chunkData.timestamp;
+
+        console.log(`[Ice] Enviando chunk: seq=${chunk.seq}, bytes=${chunk.data.length}`);
+        
+        return await this.voiceService.sendCallChunk(chunk);
+    }
+
+    // ========== DISPATCH desde Subscriber ==========
+
+    dispatchChunk(uint8Array) {
+        this.callCallbacks.onChunk.forEach(cb => cb(uint8Array));
+    }
+
+    dispatchCallStart(from, to) {
+        this.callCallbacks.onStart.forEach(cb => cb(from, to));
+    }
+
+    dispatchCallStop(from, to) {
+        this.callCallbacks.onStop.forEach(cb => cb(from, to));
+    }
+
+    // ========== REGISTRO DE CALLBACKS ==========
+
+    onCallChunk(cb) {
+        this.callCallbacks.onChunk.push(cb);
+    }
+
+    onCallStart(cb) {
+        this.callCallbacks.onStart.push(cb);
+    }
+
+    onCallStop(cb) {
+        this.callCallbacks.onStop.push(cb);
+    }
+
     // ========== Suscripción a eventos ==========
 
     subscribe(callback) {
@@ -179,6 +258,38 @@ export class IceDelegate {
             this.callbacks.splice(index, 1);
         }
     }
+
+    setupAudioPlayer() {
+        // Solo se llama una vez
+        if (this._audioSetupDone) return;
+        this._audioSetupDone = true;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+
+        const convertPCM16ToFloat32 = (bytes) => {
+            const view = new DataView(bytes.buffer);
+            const out = new Float32Array(bytes.length / 2);
+            for (let i = 0; i < out.length; i++) {
+                out[i] = view.getInt16(i * 2, true) / 32768;
+            }
+            return out;
+        };
+
+        const playPCM = (floatArray) => {
+            const buffer = audioCtx.createBuffer(1, floatArray.length, 44100);
+            buffer.copyToChannel(floatArray, 0);
+            const source = audioCtx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audioCtx.destination);
+            source.start();
+        };
+
+        this.onCallChunk((bytes) => {
+            const float = convertPCM16ToFloat32(bytes);
+            playPCM(float);
+        });
+    }
+
 }
 
 // Instancia singleton

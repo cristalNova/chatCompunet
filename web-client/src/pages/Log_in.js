@@ -31,6 +31,7 @@ const Login = () => {
             // Conectar via Ice en lugar de HTTP
             console.log('[Login] Connecting to Ice server...');
             await iceDelegate.init(username);
+            iceDelegate.setupAudioPlayer();
             console.log('[Login] Connected successfully!');
             
             // Navegar al chat

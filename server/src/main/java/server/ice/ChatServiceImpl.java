@@ -1,5 +1,6 @@
 package server.ice;
 
+import com.google.gson.Gson;
 import com.zeroc.Ice.Current;
 import Chat.*;
 import server.services.ChatManager;
@@ -7,6 +8,8 @@ import server.model.Message;
 import server.model.User;
 import server.model.HistoryRecord;
 
+import java.io.File;
+import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,7 +25,60 @@ public class ChatServiceImpl implements ChatService {
     public ChatServiceImpl(ChatManager chatManager, SubjectImpl subject) {
         this.chatManager = chatManager;
         this.subject = subject;
-        this.messageHistory = new ArrayList<>();
+        this.messageHistory = loadHistory();
+    }
+
+    private List<MessageDTO> loadHistory() {
+        try {
+            File f = new File("server_chat_history.json");
+            if (!f.exists()) return new ArrayList<>();
+
+            Gson gson = new Gson();
+            HistoryRecord[] arr =
+                    gson.fromJson(new FileReader(f), HistoryRecord[].class);
+
+            List<MessageDTO> list = new ArrayList<>();
+
+            for (HistoryRecord r : arr) {
+                list.add(convertHistoryToDTO(r));
+            }
+
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    private MessageDTO convertHistoryToDTO(HistoryRecord r) {
+
+        String from;
+        String to = "";
+        String group = "";
+
+        if (r.getContent().contains(":")) {
+            from = r.getContent().split(":", 2)[0];
+        } else {
+            from = "Unknown";
+        }
+
+        // si target es un grupo
+        if (r.getTarget().startsWith("GRUPO")) {
+            group = r.getTarget();
+        } else {
+            to = r.getTarget();
+        }
+
+        return new MessageDTO(
+                from,
+                to,
+                group,
+                r.getContent(),
+                String.valueOf(r.getTimestamp()),
+                r.getType().equals("AUDIO") ? "voicenote" : "text",
+                r.getAudioFile() != null ? r.getAudioFile() : new byte[0]
+        );
     }
 
     @Override
@@ -63,7 +119,7 @@ public class ChatServiceImpl implements ChatService {
         System.out.println("[ICE] Sending message from " + from + " to " + to);
         
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        MessageDTO messageDTO = new MessageDTO(from, to, "", message, timestamp, "text");
+        MessageDTO messageDTO = new MessageDTO(from, to, "", message, timestamp, "text", new byte[0]);
         
         // Guardar en historial
         messageHistory.add(messageDTO);
@@ -82,7 +138,7 @@ public class ChatServiceImpl implements ChatService {
         System.out.println("[ICE] Sending group message from " + from + " to group " + group);
         
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        MessageDTO messageDTO = new MessageDTO(from, "", group, message, timestamp, "text");
+        MessageDTO messageDTO = new MessageDTO(from, "", group, message, timestamp, "text", new byte[0]);
         
         // Guardar en historial
         messageHistory.add(messageDTO);

@@ -29,4 +29,28 @@ export default class Subscriber extends Chat.Observer {
         console.log('[Ice Observer] Group created:', group);
         this.delegate.handleGroupCreated(group);
     }
+
+    notifyCallStarted(from, to, current) {
+        console.log("[Ice Observer] CALL STARTED", from, to);
+        this.delegate.dispatchCallStart(from, to);
+    }
+
+    notifyCallStopped(from, to, current) {
+        console.log("[Ice Observer] CALL STOPPED", from, to);
+        this.delegate.dispatchCallStop(from, to);
+    }
+
+    // Subscriber.js
+    notifyCallChunk(chunk, current) {
+        console.log("[Ice Observer] Chunk recibido:", chunk);
+
+        // Verificar que el chunk tenga datos
+        if (!chunk || !chunk.data || chunk.data.length === 0) {
+            console.warn("Chunk invalido o vacio:", chunk);
+            return;
+        }
+
+        // El campo correcto es 'data', no 'audioData'
+        this.delegate.dispatchChunk(chunk.data);
+    }
 }

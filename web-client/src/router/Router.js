@@ -9,10 +9,10 @@ export const Router = async (paths) => {
         return notFound;
     });
 
-    return await routeComponent(state); // ⚠️ soporta async
+    return await routeComponent(state);
 };
 
-// ✅ Exportar navigate para poder usarlo en Login.js
+// Exportar navigate para poder usarlo en Login.js
 export const navigate = (path, params = {}) => {
     window.history.pushState(params, "", path);
     window.renderApp();

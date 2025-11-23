@@ -10,27 +10,23 @@ const ChatPage = async (params = {}) => {
 
     const username = params.username || "Invitado";
     let targetUser = null;
-    let isGroup = false; // <-- nueva variable
+    let isGroup = false; 
     let allMessages = [];
 
     const handleUserSelect = (user, group = false) => {
+        targetUser = user;
+        isGroup = group;
 
-    
-    targetUser = user;
-    isGroup = group;
+        userUpperBar.querySelector(".target-username")?.remove();
+        const targetLabel = document.createElement("span");
+        targetLabel.classList.add("target-username");
+        targetLabel.textContent = group ? `Grupo: ${targetUser}` : `Chat con: ${targetUser}`;
+        userUpperBar.appendChild(targetLabel);
 
-
-
-    userUpperBar.querySelector(".target-username")?.remove();
-    const targetLabel = document.createElement("span");
-    targetLabel.classList.add("target-username");
-    targetLabel.textContent = group ? `Grupo: ${targetUser}` : `Chat con: ${targetUser}`;
-    userUpperBar.appendChild(targetLabel);
-
-    outputBar.setTarget(targetUser, isGroup);
-    
-    displayFilteredMessages(targetUser, isGroup);
-};
+        outputBar.setTarget(targetUser, isGroup);
+        
+        displayFilteredMessages(targetUser, isGroup);
+    };
 
     const contactSideBar = ContactSideBar(handleUserSelect, username);
     chatPage.appendChild(contactSideBar);
@@ -61,6 +57,7 @@ const ChatPage = async (params = {}) => {
             const messageFrom = msg.from || '';
             const messageTo = msg.to || '';
             const messageGroup = msg.group || '';
+            const messageType = msg.messageType || 'text';
 
             if (group) {
                 // Mensaje de grupo
@@ -75,7 +72,39 @@ const ChatPage = async (params = {}) => {
             const msgDiv = document.createElement("div");
             const isSent = messageFrom === username;
             msgDiv.classList.add("chat-message", isSent ? "sent" : "received");
-            msgDiv.textContent = `${messageFrom}: ${messageText}`;
+            
+            if (messageType === "voicenote" && msg.audio && msg.audio.length > 0) {
+                console.log('[Chat] Rendering voice note, audio length:', msg.audio.length);
+                
+                const nameSpan = document.createElement("span");
+                nameSpan.textContent = `${messageFrom}: `;
+                nameSpan.style.fontWeight = "bold";
+                msgDiv.appendChild(nameSpan);
+                
+                const blob = new Blob([msg.audio], { type: "audio/webm" });
+                const url = URL.createObjectURL(blob);
+                
+                const audio = document.createElement("audio");
+                audio.controls = true;
+                audio.src = url;
+                audio.style.width = "100%";
+                audio.style.maxWidth = "300px";
+                audio.style.marginTop = "5px";
+                
+                // Liberar el URL cuando el audio se elimine
+                audio.addEventListener('pause', () => {
+                    if (audio.ended) {
+                        URL.revokeObjectURL(url);
+                    }
+                });
+                
+                msgDiv.appendChild(document.createElement("br"));
+                msgDiv.appendChild(audio);
+            } else {
+                // Mensaje de texto normal
+                msgDiv.textContent = `${messageFrom}: ${messageText}`;
+            }
+            
             messagesContainer.appendChild(msgDiv);
         });
 

@@ -18,6 +18,7 @@ public class ICEController {
             // Crear implementaciones de los servants
             SubjectImpl subjectImpl = new SubjectImpl();
             ChatServiceImpl chatServiceImpl = new ChatServiceImpl(chatManager, subjectImpl);
+            VoiceServiceImpl voiceServiceImpl = new VoiceServiceImpl(chatManager, subjectImpl);
             
             // Crear adapter con soporte para WebSockets
             ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints(
@@ -28,6 +29,8 @@ public class ICEController {
             // Registrar los servants
             adapter.add(chatServiceImpl, Util.stringToIdentity("ChatService"));
             adapter.add(subjectImpl, Util.stringToIdentity("Subject"));
+            adapter.add(voiceServiceImpl, Util.stringToIdentity("VoiceService"));
+
             
             // Activar adapter
             adapter.activate();

@@ -1,4 +1,15 @@
 module Chat {
+
+    sequence<byte> AudioBytes;
+
+    //Estructura para representar un fragmento de llamada
+    struct CallChunk {
+        string from;
+        string to;
+        long seq;
+        AudioBytes data;
+        long timestamp;
+    }
     
     // Estructura para representar un mensaje
     struct MessageDTO {
@@ -8,6 +19,7 @@ module Chat {
         string message;
         string timestamp;
         string messageType; // "text", "voicenote"
+        AudioBytes audio;
     }
 
     // Estructura para representar un usuario
@@ -26,7 +38,6 @@ module Chat {
     sequence<MessageDTO> MessageList;
     sequence<UserDTO> UserList;
     sequence<GroupDTO> GroupList;
-    sequence<byte> AudioBytes;
 
     // Interfaz principal del servicio de Chat
     interface ChatService {
@@ -55,6 +66,10 @@ module Chat {
         void notifyUserConnected(string username);
         void notifyUserDisconnected(string username);
         void notifyGroupCreated(GroupDTO group);
+
+        void notifyCallChunk(CallChunk chunk); // cliente recibe chunks
+        void notifyCallStarted(string from, string to);
+        void notifyCallStopped(string from, string to);
     }
 
     // Interfaz Subject para gestionar observers
@@ -66,5 +81,10 @@ module Chat {
     // Interfaz para manejo de audio/voz
     interface VoiceService {
         bool sendVoiceNote(string from, string to, string group, AudioBytes audioData);
+
+        // Llamada en tiempo real (chunks)
+        void startCall(string from, string to);
+        void stopCall(string from, string to);
+        void sendCallChunk(CallChunk chunk); // fire-and-forget
     }
 }

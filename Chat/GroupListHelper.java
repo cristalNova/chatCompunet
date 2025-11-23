@@ -16,11 +16,11 @@
 package Chat;
 
 /**
- * Helper class for marshaling/unmarshaling MessageList.
+ * Helper class for marshaling/unmarshaling GroupList.
  **/
-public final class MessageListHelper
+public final class GroupListHelper
 {
-    public static void write(com.zeroc.Ice.OutputStream ostr, MessageDTO[] v)
+    public static void write(com.zeroc.Ice.OutputStream ostr, GroupDTO[] v)
     {
         if(v == null)
         {
@@ -31,24 +31,24 @@ public final class MessageListHelper
             ostr.writeSize(v.length);
             for(int i0 = 0; i0 < v.length; i0++)
             {
-                MessageDTO.ice_write(ostr, v[i0]);
+                GroupDTO.ice_write(ostr, v[i0]);
             }
         }
     }
 
-    public static MessageDTO[] read(com.zeroc.Ice.InputStream istr)
+    public static GroupDTO[] read(com.zeroc.Ice.InputStream istr)
     {
-        final MessageDTO[] v;
-        final int len0 = istr.readAndCheckSeqSize(7);
-        v = new MessageDTO[len0];
+        final GroupDTO[] v;
+        final int len0 = istr.readAndCheckSeqSize(2);
+        v = new GroupDTO[len0];
         for(int i0 = 0; i0 < len0; i0++)
         {
-            v[i0] = MessageDTO.ice_read(istr);
+            v[i0] = GroupDTO.ice_read(istr);
         }
         return v;
     }
 
-    public static void write(com.zeroc.Ice.OutputStream ostr, int tag, java.util.Optional<MessageDTO[]> v)
+    public static void write(com.zeroc.Ice.OutputStream ostr, int tag, java.util.Optional<GroupDTO[]> v)
     {
         if(v != null && v.isPresent())
         {
@@ -56,23 +56,23 @@ public final class MessageListHelper
         }
     }
 
-    public static void write(com.zeroc.Ice.OutputStream ostr, int tag, MessageDTO[] v)
+    public static void write(com.zeroc.Ice.OutputStream ostr, int tag, GroupDTO[] v)
     {
         if(ostr.writeOptional(tag, com.zeroc.Ice.OptionalFormat.FSize))
         {
             int pos = ostr.startSize();
-            MessageListHelper.write(ostr, v);
+            GroupListHelper.write(ostr, v);
             ostr.endSize(pos);
         }
     }
 
-    public static java.util.Optional<MessageDTO[]> read(com.zeroc.Ice.InputStream istr, int tag)
+    public static java.util.Optional<GroupDTO[]> read(com.zeroc.Ice.InputStream istr, int tag)
     {
         if(istr.readOptional(tag, com.zeroc.Ice.OptionalFormat.FSize))
         {
             istr.skip(4);
-            MessageDTO[] v;
-            v = MessageListHelper.read(istr);
+            GroupDTO[] v;
+            v = GroupListHelper.read(istr);
             return java.util.Optional.of(v);
         }
         else

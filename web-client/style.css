@@ -306,3 +306,7 @@ body{
     color: black;
     font-family: 'Anonymous Pro';
 }
+
+.recording{
+    background-color: var(--light-yellow);
+}

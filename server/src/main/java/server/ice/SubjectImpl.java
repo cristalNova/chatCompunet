@@ -97,4 +97,22 @@ public class SubjectImpl implements Subject {
         
         observers.removeAll(disconnected);
     }
+
+    public void notifyCallStarted(String from, String to) {
+        for (ObserverPrx obs : observers) {
+            obs.notifyCallStartedAsync(from, to);
+        }
+    }
+
+    public void notifyCallStopped(String from, String to) {
+        for (ObserverPrx obs : observers) {
+            obs.notifyCallStoppedAsync(from, to);
+        }
+    }
+
+    public void notifyCallChunk(CallChunk chunk) {
+        for (ObserverPrx obs : observers) {
+            obs.notifyCallChunkAsync(chunk);
+        }
+    }
 }
