@@ -306,6 +306,10 @@ body{
     color: black;
     font-family: 'Anonymous Pro';
 }
+
+.recording{
+    background-color: var(--light-yellow);
+}
 .output-buttons .microphone.recording-active {
     background-color: #ff3b30 !important; /* rojo tipo iPhone */
     color: white !important;

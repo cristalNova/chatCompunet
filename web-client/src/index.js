@@ -5,7 +5,7 @@ async function renderApp() {
   const appDiv = document.getElementById('app');
   appDiv.innerHTML = ''; 
 
-  const currentRouteComponent = await Router(urls); // ⚠️ await aquí
+  const currentRouteComponent = await Router(urls);
   appDiv.appendChild(currentRouteComponent);
 }
 

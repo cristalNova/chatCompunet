@@ -9,6 +9,7 @@
   "author": "JP&Cristina",
   "license": "ISC",
   "dependencies": {
+    "ice": "^3.7.100",
     "serve": "^14.2.5"
   }
 }

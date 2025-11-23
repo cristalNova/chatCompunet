@@ -2,9 +2,7 @@ import ChatArea from "../components/ChatArea.js";
 import ContactSideBar from "../components/ContactSideBar.js";
 import OutputBar from "../components/OutputBar.js";
 import UserUpperBar from "../components/UserUpperBar.js";
-import Player from "../components/Player.js";
-import delegate from "../services/delegate.js";
-
+import iceDelegate from "../services/iceDelegate.js";
 
 const ChatPage = async (params = {}) => {
     const chatPage = document.createElement("div");
@@ -45,22 +43,73 @@ const ChatPage = async (params = {}) => {
 delegate.subscribe((payload) => {
   console.log("SUBSCRIBE payload recibido:", payload);
 
-  if (payload.type === "AUDIO") {
-    
-    if (payload.to === username && window.player && window.player.playBase64) {
-      window.player.playBase64(payload.data);
-    }
-    return;
-  }
+    const displayFilteredMessages = (target, group = false) => {
+        messagesContainer.innerHTML = "";
+        if (!target) return;
 
-});
+        console.log('[Chat] Displaying messages for:', target, 'isGroup:', group, 'Total messages:', allMessages.length);
 
+        allMessages.forEach((msg, index) => {
+            console.log(`[Chat] Message ${index}:`, msg);
+            
+            // Soporte para MessageDTO de Ice
+            const messageText = msg.message || msg.content || '';
+            const messageFrom = msg.from || '';
+            const messageTo = msg.to || '';
+            const messageGroup = msg.group || '';
+            const messageType = msg.messageType || 'text';
 
-    
-    const player = Player();
-    rightSide.appendChild(player.element);
+            if (group) {
+                // Mensaje de grupo
+                if (messageGroup !== target) return;
+            } else {
+                // Mensaje directo
+                const isFromTarget = messageFrom === target && (messageTo === username || messageTo === '');
+                const isToTarget = messageFrom === username && messageTo === target;
+                if (!(isFromTarget || isToTarget)) return;
+            }
 
-    window.player = player;
+            const msgDiv = document.createElement("div");
+            const isSent = messageFrom === username;
+            msgDiv.classList.add("chat-message", isSent ? "sent" : "received");
+            
+            if (messageType === "voicenote" && msg.audio && msg.audio.length > 0) {
+                console.log('[Chat] Rendering voice note, audio length:', msg.audio.length);
+                
+                const nameSpan = document.createElement("span");
+                nameSpan.textContent = `${messageFrom}: `;
+                nameSpan.style.fontWeight = "bold";
+                msgDiv.appendChild(nameSpan);
+                
+                const blob = new Blob([msg.audio], { type: "audio/webm" });
+                const url = URL.createObjectURL(blob);
+                
+                const audio = document.createElement("audio");
+                audio.controls = true;
+                audio.src = url;
+                audio.style.width = "100%";
+                audio.style.maxWidth = "300px";
+                audio.style.marginTop = "5px";
+                
+                // Liberar el URL cuando el audio se elimine
+                audio.addEventListener('pause', () => {
+                    if (audio.ended) {
+                        URL.revokeObjectURL(url);
+                    }
+                });
+                
+                msgDiv.appendChild(document.createElement("br"));
+                msgDiv.appendChild(audio);
+            } else {
+                // Mensaje de texto normal
+                msgDiv.textContent = `${messageFrom}: ${messageText}`;
+            }
+            
+            messagesContainer.appendChild(msgDiv);
+        });
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    };
 
     rightSide.appendChild(userUpperBar);
     rightSide.appendChild(chatArea);
@@ -104,17 +153,68 @@ delegate.subscribe((payload) => {
     
     const refreshMessages = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/history");
-            const messages = await response.json();
-            allMessages = messages;
-
-            if (targetUser) displayFilteredMessages(targetUser, isGroup); 
+            const messages = await iceDelegate.getHistory();
+            
+            // Solo actualizar si no hay mensajes locales o si recibimos más del servidor
+            if (allMessages.length === 0 || messages.length > allMessages.length) {
+                allMessages = messages;
+                if (targetUser) displayFilteredMessages(targetUser, isGroup);
+            }
         } catch (err) {
             console.error("Error cargando historial:", err);
         }
     };
 
-    setInterval(refreshMessages, 2000);
+    // Suscribirse a callbacks en tiempo real
+    const handleRealtimeMessage = (msg) => {
+        console.log('[Chat] Real-time message received:', msg);
+        
+        // Verificar si el mensaje ya existe (evitar duplicados)
+        const exists = allMessages.some(m => 
+            m.from === msg.from && 
+            m.timestamp === msg.timestamp && 
+            m.message === msg.message
+        );
+        
+        if (!exists) {
+            allMessages.push(msg);
+            if (targetUser) {
+                // Actualizar solo si el mensaje es para el chat actual
+                const isForCurrentChat = isGroup 
+                    ? msg.group === targetUser 
+                    : (msg.from === targetUser || msg.to === targetUser);
+                
+                if (isForCurrentChat) {
+                    displayFilteredMessages(targetUser, isGroup);
+                }
+            }
+        }
+    };
+
+    const handleRealtimeUserConnected = (username) => {
+        console.log('[Chat] User connected:', username);
+        // Actualizar la lista de usuarios
+        if (contactSideBar.updateUsers) {
+            contactSideBar.updateUsers();
+        }
+    };
+
+    const handleRealtimeGroupCreated = (group) => {
+        console.log('[Chat] Group created:', group);
+        // Actualizar la lista de grupos
+        if (contactSideBar.updateGroups) {
+            contactSideBar.updateGroups();
+        }
+    };
+
+    // Registrar callbacks
+    iceDelegate.subscribe({
+        onMessage: handleRealtimeMessage,
+        onUserConnected: handleRealtimeUserConnected,
+        onGroupCreated: handleRealtimeGroupCreated
+    });
+
+    // Cargar historial inicial solo una vez
     await refreshMessages();
 
     return chatPage;

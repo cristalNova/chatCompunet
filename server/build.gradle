@@ -7,9 +7,16 @@ application {
     mainClass = 'server.Server'
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation project(':shared')
+    
+    // ZeroC Ice dependencies
+    implementation 'com.zeroc:ice:3.7.10'
 }
 
 jar {
