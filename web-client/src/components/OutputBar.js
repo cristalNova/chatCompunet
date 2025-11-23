@@ -3,26 +3,32 @@ import TextInput from "./InputMessageBar.js";
 import iceDelegate from "../services/iceDelegate.js";
 
 const OutputBar = (currentUser, messagesContainer, allMessages) => {
-    let targetUser = null;
-    let isGroup = false;
+  let targetUser = null;
+  let isGroup = false;
 
-    const outputBar = document.createElement("div");
-    outputBar.classList.add("output-bar");
+  console.log("OutputBar cargado — ejecutando delegate.init()");
+  delegate.init();
 
-    const inputMessageBar = TextInput("Escribe tu mensaje...", "");
-    outputBar.appendChild(inputMessageBar);
+  setTimeout(() => {
+    delegate.publish({
+      type: "REGISTER",
+      username: currentUser
+    });
+    console.log("WS REGISTER enviado:", currentUser);
+  }, 300);
 
-    const buttons = document.createElement("div");
-    buttons.classList.add("output-buttons");
+  const outputBar = document.createElement("div");
+  outputBar.classList.add("output-bar");
 
-    const sendButton = Button({ text: "", icon: "send" });
-    const callButton = Button({ text: "", icon: "phone" });
-    const audioButton = Button({ text: "", icon: "microphone" });
+  const inputMessageBar = TextInput("Escribe tu mensaje...", "");
+  outputBar.appendChild(inputMessageBar);
 
-    buttons.appendChild(sendButton);
-    buttons.appendChild(callButton);
-    buttons.appendChild(audioButton);
-    outputBar.appendChild(buttons);
+  const buttons = document.createElement("div");
+  buttons.classList.add("output-buttons");
+
+  const sendButton = Button({ text: "", icon: "send" });
+  const callButton = Button({ text: "", icon: "phone" });
+  const audioButton = Button({ text: "", icon: "microphone" });
 
     sendButton.addEventListener("click", async () => {
         const message = inputMessageBar.value.trim();

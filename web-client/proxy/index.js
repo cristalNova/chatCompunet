@@ -5,10 +5,13 @@ import bodyParser from "body-parser";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { WebSocketServer } from "ws";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const historyFile = path.join(__dirname, "../../server_chat_history.json");
+
 
 const app = express();
 app.use(cors());
@@ -132,3 +135,57 @@ app.listen(PORT, () => {
   console.log(`Servidor Node escuchando en http://localhost:${PORT}`);
   console.log(`Frontend disponible en http://localhost:${PORT}`);
 });
+
+const wss = new WebSocketServer({ port: 8080 });
+const wsUsers = new Map();
+
+wss.on("connection", (ws) => {
+  console.log("Cliente WebSocket conectado");
+
+  ws.on("message", (msg) => {
+    try {
+      const payload = JSON.parse(msg.toString());
+
+      // Registro de usuario para mapearlo
+      if (payload.type === "REGISTER") {
+        wsUsers.set(payload.username, ws);
+        console.log("Usuario registrado WS:", payload.username);
+        return;
+      }
+
+      // Reenvío de audio (JSON con base64)
+      if (payload.type === "AUDIO") {
+        const targetWS = wsUsers.get(payload.to);
+        if (targetWS && targetWS.readyState === 1) {
+          targetWS.send(JSON.stringify(payload));
+        }
+        return;
+      }
+
+      // Reenvío de texto (si más adelante lo quieres por WS)
+      if (payload.type === "TEXT") {
+        const targetWS = wsUsers.get(payload.to);
+        if (targetWS && targetWS.readyState === 1) {
+          targetWS.send(JSON.stringify(payload));
+        }
+        return;
+      }
+
+    } catch (err) {
+      console.error("Error WS JSON:", err);
+    }
+  });
+
+  ws.on("close", () => {
+    for (const [name, sock] of wsUsers.entries()) {
+      if (sock === ws) {
+        wsUsers.delete(name);
+        console.log(`Usuario WS desconectado: ${name}`);
+        break;
+      }
+    }
+  });
+});
+
+
+

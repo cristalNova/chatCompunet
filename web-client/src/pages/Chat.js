@@ -8,6 +8,9 @@ const ChatPage = async (params = {}) => {
     const chatPage = document.createElement("div");
     chatPage.classList.add("chat-page");
 
+    delegate.init();
+
+
     const username = params.username || "Invitado";
     let targetUser = null;
     let isGroup = false; 
@@ -24,7 +27,6 @@ const ChatPage = async (params = {}) => {
         userUpperBar.appendChild(targetLabel);
 
         outputBar.setTarget(targetUser, isGroup);
-        
         displayFilteredMessages(targetUser, isGroup);
     };
 
@@ -38,10 +40,8 @@ const ChatPage = async (params = {}) => {
     const { chatArea, messagesContainer } = ChatArea();
     const outputBar = OutputBar(username, messagesContainer, allMessages);
 
-    rightSide.appendChild(userUpperBar);
-    rightSide.appendChild(chatArea);
-    rightSide.appendChild(outputBar);
-    chatPage.appendChild(rightSide);
+delegate.subscribe((payload) => {
+  console.log("SUBSCRIBE payload recibido:", payload);
 
     const displayFilteredMessages = (target, group = false) => {
         messagesContainer.innerHTML = "";
@@ -111,8 +111,46 @@ const ChatPage = async (params = {}) => {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     };
 
+    rightSide.appendChild(userUpperBar);
+    rightSide.appendChild(chatArea);
+    rightSide.appendChild(outputBar);
+    chatPage.appendChild(rightSide);
 
+   
+    const displayFilteredMessages = (target, group = false) => {
+        messagesContainer.innerHTML = "";
+        if (!target) return;
 
+        allMessages.forEach(msg => {
+            if (msg.type !== "TEXT") return;
+
+            let content = msg.content;
+            let from = "";
+            let to = msg.target;
+
+            if (content.includes(":")) {
+                const parts = content.split(":");
+                from = parts[0].trim();
+                content = parts.slice(1).join(":").trim();
+            }
+
+            if (group) {
+                if (to !== target) return;
+            } else {
+                if (!((from === username && to === target) || (from === target && to === username))) return;
+            }
+
+            const msgDiv = document.createElement("div");
+            const isSent = from === username;
+            msgDiv.classList.add("chat-message", isSent ? "sent" : "received");
+            msgDiv.textContent = content;
+            messagesContainer.appendChild(msgDiv);
+        });
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    };
+
+    
     const refreshMessages = async () => {
         try {
             const messages = await iceDelegate.getHistory();
