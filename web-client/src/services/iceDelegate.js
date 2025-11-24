@@ -21,6 +21,7 @@ export class IceDelegate {
 
 
     async init(username) {
+        this.currentUser = username;
         if (this.chatService) {
             return; // Ya inicializado
         }
@@ -31,7 +32,7 @@ export class IceDelegate {
 
         try {
             console.log('[Ice] Connecting to Ice server...');
-            this.currentUser = username;
+            
 
             const hostname = 'localhost';
             const port = 9099;

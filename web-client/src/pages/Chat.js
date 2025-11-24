@@ -8,8 +8,6 @@ const ChatPage = async (params = {}) => {
     const chatPage = document.createElement("div");
     chatPage.classList.add("chat-page");
 
-    delegate.init();
-
 
     const username = params.username || "Invitado";
     let targetUser = null;
@@ -40,8 +38,6 @@ const ChatPage = async (params = {}) => {
     const { chatArea, messagesContainer } = ChatArea();
     const outputBar = OutputBar(username, messagesContainer, allMessages);
 
-delegate.subscribe((payload) => {
-  console.log("SUBSCRIBE payload recibido:", payload);
 
     const displayFilteredMessages = (target, group = false) => {
         messagesContainer.innerHTML = "";
@@ -117,7 +113,7 @@ delegate.subscribe((payload) => {
     chatPage.appendChild(rightSide);
 
    
-    const displayFilteredMessages = (target, group = false) => {
+    const displayFilteredMessagesO = (target, group = false) => {
         messagesContainer.innerHTML = "";
         if (!target) return;
 

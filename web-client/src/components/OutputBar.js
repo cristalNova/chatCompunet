@@ -6,16 +6,6 @@ const OutputBar = (currentUser, messagesContainer, allMessages) => {
   let targetUser = null;
   let isGroup = false;
 
-  console.log("OutputBar cargado — ejecutando delegate.init()");
-  delegate.init();
-
-  setTimeout(() => {
-    delegate.publish({
-      type: "REGISTER",
-      username: currentUser
-    });
-    console.log("WS REGISTER enviado:", currentUser);
-  }, 300);
 
   const outputBar = document.createElement("div");
   outputBar.classList.add("output-bar");
@@ -29,6 +19,11 @@ const OutputBar = (currentUser, messagesContainer, allMessages) => {
   const sendButton = Button({ text: "", icon: "send" });
   const callButton = Button({ text: "", icon: "phone" });
   const audioButton = Button({ text: "", icon: "microphone" });
+   buttons.appendChild(sendButton);
+buttons.appendChild(callButton);
+buttons.appendChild(audioButton);
+
+outputBar.appendChild(buttons);
 
     sendButton.addEventListener("click", async () => {
         const message = inputMessageBar.value.trim();

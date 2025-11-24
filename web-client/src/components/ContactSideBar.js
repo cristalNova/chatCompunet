@@ -49,6 +49,8 @@ const ContactSideBar = (onSelectUser, registeredUser) => {
     const updateUsers = async () => {
         try {
             const usersDTO = await iceDelegate.getConnectedUsers();
+            console.log("USERS DTO FROM SERVER:", usersDTO);
+
             const users = usersDTO.map(u => u.username);
             userContactList.innerHTML = "";
             users.forEach(u => {

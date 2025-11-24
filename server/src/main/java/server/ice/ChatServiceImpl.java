@@ -161,18 +161,25 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public UserDTO[] getConnectedUsers(Current current) {
         System.out.println("[ICE] Getting connected users");
-        var clients = chatManager.getClients();
-        
-        return clients.keySet().stream()
-            .map(username -> new UserDTO(username, true))
-            .toArray(UserDTO[]::new);
+
+        List<String> allUsers = new ArrayList<>();
+
+        // TCP users
+        allUsers.addAll(chatManager.getClients().keySet());
+
+        // ICE users
+        allUsers.addAll(chatManager.getIceUsers());
+
+        return allUsers.stream()
+                .map(u -> new UserDTO(u, true))
+                .toArray(UserDTO[]::new);
     }
+
 
     @Override
     public boolean registerUser(String username, Current current) {
         System.out.println("[ICE] Registering user: " + username);
-        
-        // Notificar a todos que un nuevo usuario se conectó
+        chatManager.registerIceUser(username);
         subject.notifyUserConnected(username);
         
         return true;

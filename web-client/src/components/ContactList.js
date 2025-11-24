@@ -1,7 +1,7 @@
 import Contact from "./Contact.js";
 
 const ContactList = () => {
-    const listContainer = document.createElement("div");
+    const listContainer = document.createElement("ul");
     listContainer.classList.add("contact-list");    
     return listContainer;
 }

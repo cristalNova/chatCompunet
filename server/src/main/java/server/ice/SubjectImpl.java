@@ -2,12 +2,15 @@ package server.ice;
 
 import com.zeroc.Ice.Current;
 import Chat.*;
+import server.services.ChatManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectImpl implements Subject {
     
     private List<ObserverPrx> observers;
+    private ChatManager chatManager;
 
     public SubjectImpl() {
         this.observers = new ArrayList<>();
@@ -26,6 +29,8 @@ public class SubjectImpl implements Subject {
             current.con.setCloseCallback(connection -> {
                 System.out.println("[ICE] Connection closed, removing observer: " + obs.ice_getIdentity());
                 observers.remove(proxy);
+                String username = proxy.ice_getIdentity().name;
+                notifyUserDisconnected(username);
             });
         }
     }
