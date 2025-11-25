@@ -4,12 +4,21 @@
   "description": "Client front-end for chat usage",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack serve",
+    "build": "webpack"
   },
   "author": "JP&Cristina",
   "license": "ISC",
   "dependencies": {
     "ice": "^3.7.100",
     "serve": "^14.2.5"
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.103.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
   }
 }
