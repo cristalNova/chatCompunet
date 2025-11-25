@@ -1,5 +1,6 @@
 import { urls } from "./router/Routes.js";
 import { Router } from "./router/Router.js";
+import '../style.css';   
 
 async function renderApp() {
   const appDiv = document.getElementById('app');
