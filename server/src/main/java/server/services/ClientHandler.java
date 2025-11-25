@@ -123,6 +123,7 @@ public class ClientHandler extends Thread{
             response.add("groups", groupArray);
             send(response.toString());
             break;
+            
 
 
         default:

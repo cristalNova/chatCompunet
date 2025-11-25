@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import shared.CallInfo;
 import server.model.HistoryRecord;
 import server.services.*;
+import server.ice.ICEController;
 
 /**
  * Simple multi-threaded TCP chat server with groups and voice-note transfer via TCP.
@@ -29,6 +30,15 @@ public class Server {
     private static final ChatManager chatManager = new ChatManager();
 
     public static void main(String[] args) throws Exception {
+        // Iniciar servidor Ice en un thread separado
+        Thread iceThread = new Thread(() -> {
+            System.out.println("Starting Ice Server...");
+            ICEController iceController = new ICEController();
+            iceController.init(chatManager, args);
+        });
+        iceThread.start();
+        
+        // Iniciar servidor TCP tradicional
         System.out.println("Server starting on port " + PORT);
         ServerSocket serverSocket = new ServerSocket(PORT);
 

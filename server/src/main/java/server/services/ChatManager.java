@@ -20,6 +20,7 @@ public class ChatManager {
 
     private Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
     private Map<String, Set<String>> groups = new ConcurrentHashMap<>();
+    private Set<String> iceUsers=ConcurrentHashMap.newKeySet();
     private static final File historyFile = new File("server_chat_history.json");
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -35,6 +36,7 @@ public class ChatManager {
         clients.put(username, handler);
         broadcastSystem(username + " has joined");
     }
+
 
     public void unregister(String username) {
         clients.remove(username);
@@ -52,10 +54,15 @@ public class ChatManager {
     }
 
     public void broadcastSystem(String msg) {
-        String out = "[SYSTEM] " + msg;
-        for (ClientHandler h : clients.values()) h.send(out);
-        appendHistory(new HistoryRecord("SYSTEM", "ALL", msg, null));
+    String out = "[SYSTEM] " + msg;
+    for (ClientHandler h : clients.values()) {
+        if (h != null) {
+            h.send(out);
+        }
     }
+    appendHistory(new HistoryRecord("SYSTEM", "ALL", msg, null));
+}
+
 
     public void sendToUser(String user, String msg) {
         ClientHandler h = clients.get(user);
@@ -93,5 +100,17 @@ public class ChatManager {
             e.printStackTrace();
         }
     }
+    public void registerIceUser(String username) {
+    iceUsers.add(username);
+    }
+
+    public void unregisterIceUser(String username) {
+        iceUsers.remove(username);
+    }
+
+    public Set<String> getIceUsers() {
+        return iceUsers;
+    }
+
     
 }

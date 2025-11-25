@@ -1,2 +1,2 @@
 rootProject.name = 'chat_app_fx'
-include 'server', 'client', 'shared'
+include 'server', 'client', 'shared', 'ice-server'

@@ -3,6 +3,7 @@ import ContactList from "./ContactList.js";
 import Subtitle from "./Subtitle.js";
 import Title from "./Title.js";
 import PromptInput from "./PromptInput.js";
+import iceDelegate from "../services/iceDelegate.js";
 
 const ContactSideBar = (onSelectUser, registeredUser) => {
     const sideBar = document.createElement("div");
@@ -47,8 +48,10 @@ const ContactSideBar = (onSelectUser, registeredUser) => {
     
     const updateUsers = async () => {
         try {
-            const res = await fetch("http://localhost:3000/api/users");
-            const users = await res.json();
+            const usersDTO = await iceDelegate.getConnectedUsers();
+            console.log("USERS DTO FROM SERVER:", usersDTO);
+
+            const users = usersDTO.map(u => u.username);
             userContactList.innerHTML = "";
             users.forEach(u => {
                 const li = document.createElement("li");
@@ -78,15 +81,15 @@ const ContactSideBar = (onSelectUser, registeredUser) => {
     
     const updateGroups = async () => {
         try {
-            const res = await fetch("http://localhost:3000/api/groups");
-            const groups = await res.json();
+            const groupsDTO = await iceDelegate.getGroups();
             groupContactList.innerHTML = "";
 
-            groups.forEach(group => {
+            groupsDTO.forEach(group => {
                 const li = document.createElement("li");
                 li.classList.add("contact-item");
 
-                const isMember = group.members.includes(registeredUser);
+                // Por ahora asumimos que el usuario es miembro (Ice no retorna members aún)
+                const isMember = true;
 
                 if (isMember) {
                     li.textContent = group.name;
@@ -110,17 +113,8 @@ const ContactSideBar = (onSelectUser, registeredUser) => {
                     joinBtn.addEventListener("click", async (e) => {
                         e.stopPropagation();
                         try {
-                            const res = await fetch("http://localhost:3000/api/message", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    command: "join",
-                                    from: registeredUser,
-                                    group: group.name
-                                })
-                            });
-                            const result = await res.json();
-                            console.log("Joined group:", result);
+                            await iceDelegate.joinGroup(group.name);
+                            console.log("Joined group:", group.name);
                             updateGroups();
                         } catch (err) {
                             console.error("Error uniendo grupo:", err);
@@ -147,16 +141,7 @@ const ContactSideBar = (onSelectUser, registeredUser) => {
             if (!groupName) return;
 
             try {
-                const res = await fetch("http://localhost:3000/api/message", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        command: "create",
-                        from: registeredUser,
-                        group: groupName
-                    })
-                });
-                const result = await res.json();
+                const result = await iceDelegate.createGroup(groupName);
                 console.log("Grupo creado:", result);
                 updateGroups();
             } catch (err) {
@@ -165,10 +150,13 @@ const ContactSideBar = (onSelectUser, registeredUser) => {
         });
     });
 
+    // Cargar inicial de usuarios y grupos
     updateUsers();
     updateGroups();
-    setInterval(updateUsers, 5000);
-    setInterval(updateGroups, 5000);
+
+    // Exponer funciones para actualizar desde callbacks
+    sideBar.updateUsers = updateUsers;
+    sideBar.updateGroups = updateGroups;
 
     return sideBar;
 };
